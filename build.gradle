@@ -1,0 +1,28 @@
+// buildscript 属于一个script block 。 他的目的是为了配置Gradle编译所需要的依赖，
+//      此依赖指的不是我们apk运行所需要的依赖、
+buildscript {
+
+    // 添加远程仓库
+    repositories {
+        jcenter()
+    }
+
+    // 添加依赖，此依赖从远程仓库中查找
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
+    }
+}
+
+// 面向所有工程提供的依赖，在此只声明了远程仓库的地址
+allprojects {
+    // 添加远程仓库
+    repositories {
+        jcenter()
+    }
+}
+
+// 删除本地的gradle，重新下载
+task clean(type: Delete) {
+
+    delete rootProject.buildDir
+}

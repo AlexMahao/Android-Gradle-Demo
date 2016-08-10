@@ -1,0 +1,44 @@
+apply plugin: 'com.android.application'
+
+/**
+ *  gradle 的基础是Groovy，Groovy是基于Java的,所以java代码在这里都可以使用
+ *
+ *  该文件可以通过一定的方式和app下的build.gradle进行合并
+ */
+// 生成配置对象
+Properties properties = new Properties();
+// 加载配置文件
+properties.load(new FileInputStream(project.rootDir.getAbsolutePath()+"/app/channel.properties"))
+// 获取默认的配置渠道包
+String defau = properties.getProperty('channel.default')
+// 获取渠道列表
+String channel = properties.get('channel.list')
+// 将渠道列表进行分割成数组，获取相应的渠道包
+String[] channelList = channel.split(',')
+
+// 下面的代码会默认加入到app 下的build.gradle中
+android{
+
+    /**
+     * 为了获得不同的App 版本 ，能够设置一些信息，覆盖defaultConfig{}的一些配置信息
+     *
+     *  该block　不是可选项，系统不会默认创建他
+     *
+     *  打不通包时，如果有重复的，优先级如下 ，相同名字下
+     *  build variant > build type > product flavor > main source set > library dependencies
+     */
+    productFlavors{
+
+        // 循环遍历渠道包
+        for(String c : channelList){
+            // 引用变量  此时 ${c} = c的具体字符串
+            "${c}"{
+                // 声明了一个变量  类似于键值对  key = CHANNEL_VALUE  value = channel的值
+                manifestPlaceholders = [CHANNEL_VALUE: c]
+            }
+
+        }
+    }
+
+
+}

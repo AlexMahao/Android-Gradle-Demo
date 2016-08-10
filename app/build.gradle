@@ -1,0 +1,91 @@
+/**
+ * /**
+ * The first line in the build configuration applies the Android plugin for
+ * Gradle to this build and makes the android {} block available to specify
+ * Android-specific build options.
+ *
+ *  应用一个用于构建当前工程的插件，
+ *
+ *      apply plugin: 'com.android.application'
+ *     提供了一个android标签 block，能够解析android 中的一些属性
+ */
+apply plugin: 'com.android.application'
+
+// 引入channel.gradle
+apply from:'channel.gradle'
+
+android {
+    // 编译时期使用的sdk版本
+    compileSdkVersion 23
+    // 编译工具版本
+    buildToolsVersion "23.0.3"
+
+    signingConfigs{
+        config_release{
+            keyAlias 'alex'
+            keyPassword '111111'
+            storePassword '123456'
+            storeFile file('key/key.jks')
+
+
+        }
+
+    }
+
+    // 默认的配置
+    defaultConfig {
+        // pplicationId 是一个为了发布而定义独特的标识符，一般和包名一致。当然可以不一致
+        applicationId "com.alex.gradleproject"
+        // 最小sdk
+        minSdkVersion 15
+        // 此标示和compileSdkVersion，他指定的是运行时的sdk
+        targetSdkVersion 23
+        // 代码版本
+        versionCode 1
+        // app版本
+        versionName "1.0"
+    }
+
+    /**
+     *  配置多样的构建类型，构建系统默认的有两种类型：debug 和 relsase
+     *      debug 类型不会显示的展示在buildType 中但是他已经包含了debug 工具和完成相应的签名
+     *
+     *      release 默认显示，且添加了混淆的配置，但是签名相关的并没有被默认配置
+     *
+     */
+    buildTypes {
+        // 是否运行混淆
+        release {
+            // 改为true ，表示开启混淆
+            minifyEnabled false
+            // 混淆的文件地址
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // 添加签名信息
+            signingConfig signingConfigs.config_release
+
+        }
+    }
+
+    /**
+     * 为了获得不同的App 版本 ，能够设置一些信息，覆盖defaultConfig{}的一些配置信息
+     *
+     *  该block　不是可选项，系统不会默认创建他
+     *
+     *  打不通包时，如果有重复的，优先级如下 ，相同名字下
+     *  build variant > build type > product flavor > main source set > library dependencies
+     */
+
+}
+
+// 依赖
+dependencies {
+    // module下的libs 文件夹下的jar文件
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    // 测试需要用的jar，不会打包到apk中
+    testCompile 'junit:junit:4.12'
+    // 打包到apk中的jar
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    // lib依赖工程
+    compile project(':lib')
+}
