@@ -78,6 +78,21 @@ android {
 
 }
 
+/*buildscript{
+    repositories{
+        maven{
+            url uri('../repo')
+        }
+    }
+    dependencies{
+        classpath 'com.alex_mahao.gradle.plugin:test:2.0.0'
+    }
+}*/
+
+// 引用插件
+apply plugin: 'plugin.test'
+
+
 // 依赖
 dependencies {
     // module下的libs 文件夹下的jar文件
@@ -86,6 +101,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     // 打包到apk中的jar
     compile 'com.android.support:appcompat-v7:23.4.0'
+
     // lib依赖工程
     compile project(':lib')
 }

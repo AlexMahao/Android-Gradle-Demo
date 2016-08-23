@@ -5,11 +5,20 @@ buildscript {
     // 添加远程仓库
     repositories {
         jcenter()
+        // Gradle 插件的仓库
+        maven {
+            url  "http://dl.bintray.com/alexsmille/maven"
+        }
     }
 
     // 添加依赖，此依赖从远程仓库中查找
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0'
+        //自己编写的Gradle插件
+        classpath 'com.alex_mahao.gradle.plugin:gradleplugin:1.0.0'
+        // 将项目发布到JCenter 所需要的jar
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+        classpath 'com.github.dcendents:android-maven-plugin:1.2'
     }
 }
 
@@ -18,6 +27,10 @@ allprojects {
     // 添加远程仓库
     repositories {
         jcenter()
+/*
+        maven{
+            url 'https://dl.bintray.com/alexsmille/maven/'
+        }*/
     }
 }
 
